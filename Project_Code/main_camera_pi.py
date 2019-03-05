@@ -17,7 +17,8 @@ print('Welcome to Jon and Seb\'s stargazing program. \n')
 
 
 cwd = os.getcwd()
-cwd = cwd + '\\Images'
+cwd_images = cwd + '\\Images'
+cwd_flat_field = cwd + "\\Flat_Field"
 
 for root, dirs, files in os.walk(cwd):
     # new subdir, so let's make a new...
@@ -30,18 +31,23 @@ for root, dirs, files in os.walk(cwd):
     largest = max(list_of_files)
     print ('Most recent image is - ' + largest)
 
-x = 1
-while x < 2:
-    loop = raw_input('If you want to quit, press \'q\'. \nIf you want to take a picture, press any key - ')
-    if loop == 'q':
-        x = 2
-    else:
-        fp = raw_input('Please provide a filepath to save the image to, if you do not have a filepath, please press \'n\' - ')
-        
-        if fp == 'n':
-            timestr = time.strftime("%Y%m%d-%H%M%S")
-            filename = cwd + '\\' + timestr + '.png'
-            CR.image_with_arguments()
 
-        
-        #CR.image_with_arguments()
+def main():
+    CR.Initialise()
+    x = 1
+    flatfield = raw_input('Are you doing a flat field calibration? - (Y/N)')
+    if flatfield != 'N' or 'n':
+        CR.flatfield(cwd_flat_field)
+        x = 2
+    while x < 2:
+        loop = raw_input('If you want to quit, press \'q\'. \nIf you want to take an image, press any key - ')
+        if loop == 'q':
+            x = 2
+        else:
+            fp = raw_input('Please provide a filepath to save the image to, if you do not have a filepath, please press \'n\' - ')
+            
+            if fp == 'n':
+                print('Using default file path.\n')
+                timestr = time.strftime("%Y%m%d-%H%M%S")
+                filename = cwd_images + '\\' + timestr + '.png'
+                CR.image_with_arguments(filename)
